@@ -1,5 +1,6 @@
 require 'class'
 require 'egg'
+local physics = require("physics")
 
 MainGame = class()
 
@@ -19,14 +20,28 @@ function MainGame:init()
    physics.addBody( self.nest, 'static', { density=5.6, friction=10.6, bounce=0.0  } )
 
    Runtime:addEventListener( "touch", function(event) self:onScreenTouch(event) end )
+
+   Runtime:addEventListener( "collision", function(event) self:onCollision(event) end )
+end
+
+
+function MainGame:onCollision( event )
+   if (event.phase == "began") then
+      physics.pause()
+      self:text('EGG-CELLENT!')
+   end
+end
+
+function MainGame:text(text)
+   self.instructionLabel = display.newText( text, display.contentWidth / 2 - 50, display.contentHeight / 2 - 50, "ComicSansMS", 17 )
+   self.instructionLabel:setTextColor( 190, 255, 131, 150 )
 end
 
 
 function MainGame:mainGameLoop()
 
    if self:isDead() then
-      self.instructionLabel = display.newText( "TRY AGAIN!", display.contentWidth / 2 - 50, display.contentHeight / 2 - 50, "ComicSansMS", 17 )
-      self.instructionLabel:setTextColor( 190, 255, 131, 150 )
+      self:text('TRY AGAIN!')
       self.state = 'dead'
    end
 
