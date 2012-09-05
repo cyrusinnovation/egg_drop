@@ -14,7 +14,6 @@ function MainGame:init()
 
    self.state = 'falling'
 
-
    self.nest = display.newImage( "nest.png", display.contentWidth / 2, display.contentHeight - 50 )
    self.nest.x = self.nest.x - self.nest.width / 2
    physics.addBody( self.nest, 'static', { density=5.6, friction=10.6, bounce=0.0  } )
@@ -33,13 +32,12 @@ function MainGame:onCollision( event )
 end
 
 function MainGame:text(text)
-   self.instructionLabel = display.newText( text, display.contentWidth / 2 - 50, display.contentHeight / 2 - 50, "ComicSansMS", 17 )
+   self.instructionLabel = display.newText( text, display.contentWidth / 2 - 80, display.contentHeight / 2 - 50, "ComicSansMS", 27 )
    self.instructionLabel:setTextColor( 190, 255, 131, 150 )
 end
 
 
 function MainGame:mainGameLoop()
-
    if self:isDead() then
       self:text('TRY AGAIN!')
       self.state = 'dead'
