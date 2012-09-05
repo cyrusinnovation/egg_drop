@@ -1,0 +1,3 @@
+* TODO
+** Find length of font so we can accurately center it
+** make sure that we are not leaking memory with eggs

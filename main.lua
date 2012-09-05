@@ -1,4 +1,4 @@
-require 'egg'
+require 'main_game'
 
 local physics = require("physics")
 physics.start()
@@ -17,24 +17,13 @@ end
 
 display.setStatusBar( display.HiddenStatusBar )
 
---local main_game = MainGame(Level1())
+local main_game = MainGame()
 
 function loop()
-   --main_game:mainGameLoop()
+   main_game:mainGameLoop()
 end
 
---Runtime:addEventListener( "enterFrame", loop )
-
--- The final "true" parameter overrides Corona's auto-scaling of large images
-local background = display.newImage( "sky.png", 0, 0, true )
-background.x = display.contentWidth / 2
-background.y = display.contentHeight / 2
-
-
-local instructionLabel = display.newText( "TRY AGAIN!", display.contentWidth / 2 - 50, display.contentHeight / 2 - 50, "ComicSansMS", 17 )
-instructionLabel:setTextColor( 190, 255, 131, 150 )
-
-local egg = Egg()
+Runtime:addEventListener( "enterFrame", loop )
 
 
 -- local fps = require("fps")
