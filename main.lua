@@ -1,3 +1,5 @@
+require 'egg'
+
 local physics = require("physics")
 physics.start()
 
@@ -6,10 +8,8 @@ display.setStatusBar( display.HiddenStatusBar )
 if os.getenv("LUA_TEST") then
    require "lunatest.lunatest"
 
-   lunatest.suite("tests.main_game_test")
+   --lunatest.suite("tests.main_game_test")
    lunatest.suite("tests.egg_test")
-   lunatest.suite("tests.zombie_test")
-   lunatest.suite("tests.wall_test")
 
    lunatest.run()
    os.exit()
@@ -25,13 +25,16 @@ end
 
 --Runtime:addEventListener( "enterFrame", loop )
 
+-- The final "true" parameter overrides Corona's auto-scaling of large images
+local background = display.newImage( "sky.png", 0, 0, true )
+background.x = display.contentWidth / 2
+background.y = display.contentHeight / 2
 
--- function to drop random coconuts and rocks
-local egg = display.newImage( "egg.png" )
-egg.x = 40 + math.random( display.contentWidth / 2 ); egg.y = -40
-physics.addBody( egg, { density=0.6, friction=0.6, bounce=0.6, radius=19 } )
-egg.angularVelocity = math.random(600) - 300
-egg.isSleepingAllowed = false
+
+local instructionLabel = display.newText( "TRY AGAIN!", display.contentWidth / 2 - 50, display.contentHeight / 2 - 50, "ComicSansMS", 17 )
+instructionLabel:setTextColor( 190, 255, 131, 150 )
+
+local egg = Egg()
 
 
 -- local fps = require("fps")
