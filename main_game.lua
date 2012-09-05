@@ -13,18 +13,27 @@ function MainGame:init()
 
    self.state = 'falling'
 
+
+   self.nest = display.newImage( "nest.png", display.contentWidth / 2, display.contentHeight - 50 )
+   self.nest.x = self.nest.x - self.nest.width / 2
+   physics.addBody( self.nest, 'static', { density=5.6, friction=10.6, bounce=0.0  } )
+
    Runtime:addEventListener( "touch", function(event) self:onScreenTouch(event) end )
 end
 
 
 function MainGame:mainGameLoop()
 
-   if self.state == 'falling' and self.egg.sprite.y > display.contentHeight + self.egg.sprite.height * 1.05 then
+   if self:isDead() then
       self.instructionLabel = display.newText( "TRY AGAIN!", display.contentWidth / 2 - 50, display.contentHeight / 2 - 50, "ComicSansMS", 17 )
       self.instructionLabel:setTextColor( 190, 255, 131, 150 )
       self.state = 'dead'
    end
 
+end
+
+function MainGame:isDead()
+   return self.state == 'falling' and self.egg.sprite.y > display.contentHeight + self.egg.sprite.height * 1.05
 end
 
 function MainGame:onScreenTouch( event )
