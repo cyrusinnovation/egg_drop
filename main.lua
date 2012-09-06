@@ -1,10 +1,8 @@
-require 'main_game'
-require 'levels.level_1'
-
 local physics = require("physics")
 physics.start()
 
-display.setStatusBar( display.HiddenStatusBar )
+require 'main_game'
+require 'levels.level_1'
 
 if os.getenv("LUA_TEST") then
    require "lunatest.lunatest"
@@ -25,7 +23,6 @@ function loop()
 end
 
 Runtime:addEventListener( "enterFrame", loop )
-
 
 -- local fps = require("fps")
 -- local performance = fps.PerformanceOutput.new();

@@ -47,8 +47,7 @@ function MainGame:newLevel(Level)
 end
 
 function MainGame:unloadLevel()
-   self.egg:cleanup()
-   self.nest:cleanup()
+   self.level:cleanup()
 end
 
 function MainGame:displayText(text)
@@ -84,7 +83,7 @@ function MainGame:onScreenTouch( event )
 end
 
 function MainGame:onCollision( event )
-   if (event.phase == "began") then
+   if (event.phase == "began" and ((event.object1 == self.nest.sprite and event.object2 == self.egg.sprite) or (event.object2 == self.nest.sprite and event.object1 == self.egg.sprite))) then
       physics.pause()
       self.state = 'won'
       self:displayText('EGG-CELLENT!')
@@ -100,6 +99,7 @@ function MainGame:touchBegan()
    if self.state == 'won' then
       self:removeLabel()
       self:newLevel(Level2)
+      
    end
 end
 

@@ -47,5 +47,5 @@ function test_can_move_to_next_level()
    main_game.state = 'won'
    main_game:touchBegan()
 
-   assert_equal('EGG-CELLENT!', main_game.label.text)
+   assert_equal('falling', main_game.state)
 end

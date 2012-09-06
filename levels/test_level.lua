@@ -8,3 +8,8 @@ function TestLevel:createLevel()
    self.mainGame.nest = Nest(display.contentWidth / 2, display.contentHeight - 50)
    self.mainGame.nest:setX(self.mainGame.nest:getX() - self.mainGame.nest.sprite.width / 2)
 end
+
+function TestLevel:cleanup()
+   self.mainGame.egg:cleanup()
+   self.mainGame.nest:cleanup()
+end
