@@ -1,6 +1,7 @@
 require 'class'
+require 'game_sprite'
 
-Background = class()
+Background = class(GameSprite)
 
 function Background:init()
    self.sprite = display.newImage( "sky.png", 0, 0 )

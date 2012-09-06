@@ -17,14 +17,20 @@ function MainGame:init()
    Runtime:addEventListener( "collision", function(event) self:onCollision(event) end )
 end
 
+function MainGame:cleanup()
+   self.egg:cleanup()
+   self.background:cleanup()
+   self.nest:cleanup()
+end
+
 function MainGame:displayText(text)
-   if self.instructionLabel then
+   if self.label then
       print('You should have cleaned up your old string bad boy.')
-      self:removeInstructionLabel()
+      self:removeLabel()
    end
 
-   self.instructionLabel = display.newText( text, display.contentWidth / 2 - 80, display.contentHeight / 2 - 50, "ComicSansMS", 27 )
-   self.instructionLabel:setTextColor( 190, 255, 131, 150 )
+   self.label = display.newText( text, display.contentWidth / 2 - 80, display.contentHeight / 2 - 50, "ComicSansMS", 27 )
+   self.label:setTextColor( 190, 255, 131, 150 )
 end
 
 function MainGame:mainGameLoop()
@@ -59,7 +65,7 @@ function MainGame:touchBegan()
    if self.state == 'dead' then
       self.state = 'falling'
       self:createNewEgg()
-      self:removeInstructionLabel()
+      self:removeLabel()
    end
 end
 
@@ -68,7 +74,7 @@ function MainGame:createNewEgg()
    self.egg = Egg()
 end
 
-function MainGame:removeInstructionLabel()
-   self.instructionLabel:removeSelf()
-   self.instructionLabel = nil
+function MainGame:removeLabel()
+   self.label:removeSelf()
+   self.label = nil
 end

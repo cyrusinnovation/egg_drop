@@ -1,6 +1,7 @@
 require 'class'
+require 'game_sprite'
 
-Nest = class()
+Nest = class(GameSprite)
 
 function Nest:init()
    self.sprite = display.newImage( "nest.png", display.contentWidth / 2, display.contentHeight - 50 )
