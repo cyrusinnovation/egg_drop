@@ -8,7 +8,7 @@ display.setStatusBar( display.HiddenStatusBar )
 if os.getenv("LUA_TEST") then
    require "lunatest.lunatest"
 
-   --lunatest.suite("tests.main_game_test")
+   lunatest.suite("tests.main_game_test")
    lunatest.suite("tests.egg_test")
 
    lunatest.run()

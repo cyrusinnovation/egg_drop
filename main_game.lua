@@ -1,25 +1,19 @@
 require 'class'
 require 'egg'
+require 'background'
+require 'nest'
+
 local physics = require("physics")
 
 MainGame = class()
 
 function MainGame:init()
-   -- The final "true" parameter overrides Corona's auto-scaling of large images
-   self.background = display.newImage( "sky.png", 0, 0, true )
-   self.background.x = display.contentWidth / 2
-   self.background.y = display.contentHeight / 2
-
+   self.background = Background()
    self.egg = Egg()
-
+   self.nest = Nest()
    self.state = 'falling'
 
-   self.nest = display.newImage( "nest.png", display.contentWidth / 2, display.contentHeight - 50 )
-   self.nest.x = self.nest.x - self.nest.width / 2
-   physics.addBody( self.nest, 'static', { density=5.6, friction=10.6, bounce=0.0  } )
-
    Runtime:addEventListener( "touch", function(event) self:onScreenTouch(event) end )
-
    Runtime:addEventListener( "collision", function(event) self:onCollision(event) end )
 end
 
