@@ -2,19 +2,23 @@ require 'class'
 require 'egg'
 require 'background'
 require 'nest'
+require 'levels.test_level'
 
 local physics = require("physics")
 
 MainGame = class()
 
-function MainGame:init()
+function MainGame:init(Level)
    self.background = Background()
-   self.egg = Egg()
-   self.nest = Nest()
    self.state = 'falling'
+   self:loadLevel(Level)
 
    Runtime:addEventListener( "touch", function(event) self:onScreenTouch(event) end )
    Runtime:addEventListener( "collision", function(event) self:onCollision(event) end )
+end
+
+function MainGame:loadLevel(Level)
+   self.level = Level(self)
 end
 
 function MainGame:cleanup()
@@ -64,7 +68,7 @@ end
 function MainGame:touchBegan()
    if self.state == 'dead' then
       self.state = 'falling'
-      self:createNewEgg()
+      self.level:reload()
       self:removeLabel()
    end
 end

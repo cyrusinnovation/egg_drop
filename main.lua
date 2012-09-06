@@ -1,4 +1,5 @@
 require 'main_game'
+require 'levels.level_1'
 
 local physics = require("physics")
 physics.start()
@@ -17,7 +18,7 @@ end
 
 display.setStatusBar( display.HiddenStatusBar )
 
-local main_game = MainGame()
+local main_game = MainGame(Level1)
 
 function loop()
    main_game:mainGameLoop()

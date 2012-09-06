@@ -3,7 +3,7 @@ module(..., package.seeall)
 require "egg"
 
 function setup()
-   egg = Egg()
+   egg = Egg(30)
 end
 
 function teardown()
@@ -16,7 +16,7 @@ function test_egg_has_sprite()
 end
 
 function test_egg_starting_pos()
-   assert_equal(egg.sprite.x, display.contentWidth / 2)
-   assert_equal(egg.sprite.y, -40)
+   assert_equal(30, egg.sprite.x)
+   assert_equal(-40, egg.sprite.y)
 end
 

@@ -3,9 +3,9 @@ require 'game_sprite'
 
 Egg = class(GameSprite)
 
-function Egg:init()
-   self.sprite = display.newImage( "egg.png" )
-   self.sprite.x = display.contentWidth / 2
+function Egg:init(x)
+   self.sprite = display.newImage("egg.png")
+   self.sprite.x = x
    self.sprite.y = -40
 
    local eggShape = { 0,-30, 22,-10, 16,26, 2, 30,  -2, 30, -16,26, -22,-10 }
