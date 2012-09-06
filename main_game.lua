@@ -17,26 +17,21 @@ function MainGame:init()
    Runtime:addEventListener( "collision", function(event) self:onCollision(event) end )
 end
 
-
-function MainGame:onCollision( event )
-   if (event.phase == "began") then
-      physics.pause()
-      self:text('EGG-CELLENT!')
+function MainGame:displayText(text)
+   if self.instructionLabel then
+      print('You should have cleaned up your old string bad boy.')
+      self:removeInstructionLabel()
    end
-end
 
-function MainGame:text(text)
    self.instructionLabel = display.newText( text, display.contentWidth / 2 - 80, display.contentHeight / 2 - 50, "ComicSansMS", 27 )
    self.instructionLabel:setTextColor( 190, 255, 131, 150 )
 end
 
-
 function MainGame:mainGameLoop()
    if self:isDead() then
-      self:text('TRY AGAIN!')
+      self:displayText('TRY AGAIN!')
       self.state = 'dead'
    end
-
 end
 
 function MainGame:isDead()
@@ -53,13 +48,27 @@ function MainGame:onScreenTouch( event )
   return true
 end
 
+function MainGame:onCollision( event )
+   if (event.phase == "began") then
+      physics.pause()
+      self:displayText('EGG-CELLENT!')
+   end
+end
 
 function MainGame:touchBegan()
    if self.state == 'dead' then
-      self.egg:cleanup()
-      self.egg = Egg()
       self.state = 'falling'
-      self.instructionLabel:removeSelf()
-      self.instructionLabel = nil
+      self:createNewEgg()
+      self:removeInstructionLabel()
    end
+end
+
+function MainGame:createNewEgg()
+   self.egg:cleanup()
+   self.egg = Egg()
+end
+
+function MainGame:removeInstructionLabel()
+   self.instructionLabel:removeSelf()
+   self.instructionLabel = nil
 end
