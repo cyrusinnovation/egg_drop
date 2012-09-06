@@ -32,5 +32,20 @@ function test_can_restart_lost_game()
 
    assert_equal('falling', main_game.state)
    assert_nil(main_game.label)
-   assert_lt(0, main_game.egg.sprite.y)
+   assert_lt(0, main_game.egg:getY())
+end
+
+function test_can_finish_level()
+   -- main_game.egg:setPos(main_game.nest:getPos())
+   -- main_game.egg:setY(main_game.egg:getY() - 20)
+   for x=1,100 do main_game:mainGameLoop(); end
+
+   assert_equal('EGG-CELLENT!', main_game.label.text)
+end
+
+function test_can_move_to_next_level()
+   main_game.state = 'won'
+   main_game:touchBegan()
+
+   assert_equal('EGG-CELLENT!', main_game.label.text)
 end

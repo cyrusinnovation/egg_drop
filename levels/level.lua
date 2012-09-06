@@ -9,7 +9,3 @@ end
 
 function Level:createLevel()
 end
-
-function Level:reload()
-   self:createLevel()
-end

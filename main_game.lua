@@ -2,7 +2,7 @@ require 'class'
 require 'egg'
 require 'background'
 require 'nest'
-require 'levels.test_level'
+require 'levels.level_2'
 
 local physics = require("physics")
 
@@ -10,20 +10,44 @@ MainGame = class()
 
 function MainGame:init(Level)
    self.background = Background()
-   self.state = 'falling'
-   self:loadLevel(Level)
+   self:newLevel(Level)
 
-   Runtime:addEventListener( "touch", function(event) self:onScreenTouch(event) end )
-   Runtime:addEventListener( "collision", function(event) self:onCollision(event) end )
-end
+   self.screenTouch = function(event) self:onScreenTouch(event) end
+   self.collision = function(event) self:onCollision(event) end
 
-function MainGame:loadLevel(Level)
-   self.level = Level(self)
+   Runtime:addEventListener( "touch", self.screenTouch )
+   Runtime:addEventListener( "collision", self.collision )
 end
 
 function MainGame:cleanup()
-   self.egg:cleanup()
+   self:unloadLevel()
    self.background:cleanup()
+
+   Runtime:removeEventListener( "touch", self.screenTouch )
+   Runtime:removeEventListener( "collision", self.collision )
+end
+
+function MainGame:reloadLevel()
+   self:unloadLevel()
+   self.level:createLevel()
+
+   physics.start()
+   self.state = 'falling'
+end
+
+function MainGame:newLevel(Level)
+   if self.level then
+      self:unloadLevel()
+   end
+
+   self.level = Level(self)
+
+   physics.start()
+   self.state = 'falling'
+end
+
+function MainGame:unloadLevel()
+   self.egg:cleanup()
    self.nest:cleanup()
 end
 
@@ -41,11 +65,12 @@ function MainGame:mainGameLoop()
    if self:isDead() then
       self:displayText('TRY AGAIN!')
       self.state = 'dead'
+      physics.pause()
    end
 end
 
 function MainGame:isDead()
-   return self.state == 'falling' and self.egg.sprite.y > display.contentHeight + self.egg.sprite.height * 1.05
+   return self.state == 'falling' and self.egg:getY() > display.contentHeight + self.egg.sprite.height * 1.05
 end
 
 function MainGame:onScreenTouch( event )
@@ -61,15 +86,20 @@ end
 function MainGame:onCollision( event )
    if (event.phase == "began") then
       physics.pause()
+      self.state = 'won'
       self:displayText('EGG-CELLENT!')
    end
 end
 
 function MainGame:touchBegan()
    if self.state == 'dead' then
-      self.state = 'falling'
-      self.level:reload()
+      self:reloadLevel()
       self:removeLabel()
+   end
+
+   if self.state == 'won' then
+      self:removeLabel()
+      self:newLevel(Level2)
    end
 end
 
@@ -79,6 +109,8 @@ function MainGame:createNewEgg()
 end
 
 function MainGame:removeLabel()
-   self.label:removeSelf()
-   self.label = nil
+   if self.label then
+      self.label:removeSelf()
+      self.label = nil
+   end
 end
