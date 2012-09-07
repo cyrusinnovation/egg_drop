@@ -2,7 +2,9 @@ require 'class'
 require 'egg'
 require 'background'
 require 'nest'
+require 'trampoline'
 require 'levels.level_2'
+require 'levels.level_3'
 
 local physics = require("physics")
 
@@ -61,7 +63,7 @@ function MainGame:displayText(text)
       self:removeLabel()
    end
 
-   self.label = display.newText( text, display.contentWidth / 2 - 80, display.contentHeight / 2 - 50, "ComicSansMS", 27 )
+   self.label = display.newText( text, display.contentWidth / 2 - 80, display.contentHeight / 2 - 50, system.nativeFont, 27 )
    self.label:setTextColor( 190, 255, 131, 150 )
 end
 
@@ -102,7 +104,12 @@ function MainGame:touchBegan(event)
       self:removeLabel()
    elseif self.state == 'won' then
       self:removeLabel()
-      self:newLevel(Level2)
+      level = math.random(0, 1)
+      if level == 0 then
+	 self:newLevel(Level2)
+      else
+	 self:newLevel(Level3)
+      end
    elseif self.state == 'falling' then
       self.startTrampoline = {x = event.x, y = event.y}
    end
