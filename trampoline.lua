@@ -19,7 +19,7 @@ function Trampoline:create(startX, startY, endX, endY)
 
    local distance = math.sqrt((endX - startX) ^ 2 + (endY - startY) ^ 2)
 
-   local boardCount = 1
+   local boardCount = 10
 
    local boardLength = distance / boardCount
 
@@ -54,7 +54,8 @@ function Trampoline:create(startX, startY, endX, endY)
       	 prevLink = boards[j-1] -- each board is joined with the one before it
 	 joints[j] = physics.newJoint( "distance", prevLink, board, prevLink.x + jointOffestX, prevLink.y + jointOffestY,  board.x - jointOffestX, board.y - jointOffestY)
       	 joints[j].length = 1.94
-      	 -- joints[j].frequency = 0
+      	 joints[j].frequency = 6
+      	 joints[j].dampingRatio  = 0.7
       else
       	 joints[j] = physics.newJoint( "pivot", self.pole1, board, self.pole1.x, self.pole1.y )
       end
