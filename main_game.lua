@@ -10,6 +10,7 @@ MainGame = class()
 
 function MainGame:init(Level)
    self.background = Background()
+   self.trampolines = {}
    self:newLevel(Level)
 
    self.screenTouch = function(event) self:onScreenTouch(event) end
@@ -48,6 +49,10 @@ end
 
 function MainGame:unloadLevel()
    self.level:cleanup()
+   for i, trampoline in ipairs(self.trampolines) do
+      trampoline:cleanup()
+   end
+   self.trampolines = {}
 end
 
 function MainGame:displayText(text)
@@ -74,9 +79,10 @@ end
 
 function MainGame:onScreenTouch( event )
   if event.phase == "began" then
-     self:touchBegan()
+     self:touchBegan(event)
   elseif event.phase == "moved" then
   elseif event.phase == "ended" or event.phase == "cancelled" then
+     self:touchEnded(event)
   end
 
   return true
@@ -90,16 +96,22 @@ function MainGame:onCollision( event )
    end
 end
 
-function MainGame:touchBegan()
+function MainGame:touchBegan(event)
    if self.state == 'dead' then
       self:reloadLevel()
       self:removeLabel()
-   end
-
-   if self.state == 'won' then
+   elseif self.state == 'won' then
       self:removeLabel()
       self:newLevel(Level2)
-      
+   elseif self.state == 'falling' then
+      self.startTrampoline = {x = event.x, y = event.y}
+   end
+end
+
+function MainGame:touchEnded(event)
+   if self.state == 'falling' and self.startTrampoline then
+      table.insert(self.trampolines, Trampoline(self.startTrampoline.x, self.startTrampoline.y, event.x, event.y))
+      self.startTrampoline = {x = event.x, y, event.y}
    end
 end
 

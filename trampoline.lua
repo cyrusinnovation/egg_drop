@@ -3,8 +3,8 @@ local physics = require("physics")
 
 Trampoline = class()
 
-function Trampoline:init()
-
+function Trampoline:init(startX, startY, endX, endY)
+   self:create(startX, startY, endX, endY)
 end
 
 function Trampoline:create(startX, startY, endX, endY)
