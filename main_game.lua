@@ -55,6 +55,7 @@ function MainGame:unloadLevel()
       trampoline:cleanup()
    end
    self.trampolines = {}
+   self.lastY = nil
 end
 
 function MainGame:displayText(text)
@@ -73,6 +74,17 @@ function MainGame:mainGameLoop()
       self.state = 'dead'
       physics.pause()
    end
+
+   if self.lastY and self.state == 'falling' and (self.egg:getY() < self.lastY) then
+      self.egg.sprite:applyForce(0, -3200.0, self.egg:getX(), self.egg:getY())
+      self.state = 'boosted'
+   end
+   
+   if self.state == 'boosted' and (self.egg:getY() > self.lastY) then
+      self.state = 'falling'
+   end
+
+   self.lastY = self.egg:getY()
 end
 
 function MainGame:isDead()
@@ -91,7 +103,7 @@ function MainGame:onScreenTouch( event )
 end
 
 function MainGame:onCollision( event )
-   if (event.phase == "began" and ((event.object1 == self.nest.sprite and event.object2 == self.egg.sprite) or (event.object2 == self.nest.sprite and event.object1 == self.egg.sprite))) then
+   if (event.phase == "began" and self:didEggHitNest(event.object1, event.object2)) then
       physics.pause()
       self.state = 'won'
       self:displayText('EGG-CELLENT!')
@@ -110,13 +122,13 @@ function MainGame:touchBegan(event)
       else
 	 self:newLevel(Level3)
       end
-   elseif self.state == 'falling' then
+   elseif self:isPlayingState() then
       self.startTrampoline = {x = event.x, y = event.y}
    end
 end
 
 function MainGame:touchEnded(event)
-   if self.state == 'falling' and self.startTrampoline then
+   if self:isPlayingState() and self.startTrampoline then
       table.insert(self.trampolines, Trampoline(self.startTrampoline.x, self.startTrampoline.y, event.x, event.y))
       self.startTrampoline = {x = event.x, y, event.y}
    end
@@ -125,6 +137,14 @@ end
 function MainGame:createNewEgg()
    self.egg:cleanup()
    self.egg = Egg()
+end
+
+function MainGame:isPlayingState()
+   return self.state == 'falling' or self.state == 'boosted'
+end
+
+function MainGame:didEggHitNest(object1, object2)
+   return ((object1 == self.nest.sprite and object2 == self.egg.sprite) or (object2 == self.nest.sprite and object1 == self.egg.sprite))
 end
 
 function MainGame:removeLabel()

@@ -43,7 +43,7 @@ function Trampoline:create(startX, startY, endX, endY)
       board.x = x
       board.y = y
 
-      physics.addBody( board, { density=33, friction=0.1, bounce=0.75 } )
+      physics.addBody( board, { density=33, friction=0.1, bounce=0.0 } )
       
       -- damping the board motion increases the "tension" in the bridge
       board.angularDamping = 5000
