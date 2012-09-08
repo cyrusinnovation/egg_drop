@@ -136,11 +136,6 @@ function MainGame:touchEnded(event)
    end
 end
 
-function MainGame:createNewEgg()
-   self.egg:cleanup()
-   self.egg = Egg()
-end
-
 function MainGame:isPlayingState()
    return self.state == 'falling' or self.state == 'boosted'
 end
