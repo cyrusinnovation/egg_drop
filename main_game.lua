@@ -129,8 +129,10 @@ end
 
 function MainGame:touchEnded(event)
    if self:isPlayingState() and self.startTrampoline then
-      table.insert(self.trampolines, Trampoline(self.startTrampoline.x, self.startTrampoline.y, event.x, event.y))
-      self.startTrampoline = {x = event.x, y, event.y}
+      local trampoline = Trampoline(self.startTrampoline.x, self.startTrampoline.y, event.x, event.y)
+      table.insert(self.trampolines, trampoline)
+      local startFade = function() trampoline:fadeOut(self); end
+      timer.performWithDelay(2000, startFade)
    end
 end
 
@@ -152,4 +154,16 @@ function MainGame:removeLabel()
       self.label:removeSelf()
       self.label = nil
    end
+end
+
+function MainGame:removeTrampoline(trampolineToRemove)
+   local trampolineToRemoveIndex = 0
+
+   for i, trampoline in ipairs(self.trampolines) do
+      if trampoline == trampolineToRemove then
+	 trampolineToRemoveIndex = i
+      end
+   end
+   trampolineToRemove:cleanup()
+   table.remove(self.trampolines, trampolineToRemoveIndex)
 end

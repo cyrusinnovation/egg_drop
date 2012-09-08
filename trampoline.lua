@@ -20,9 +20,10 @@ function Trampoline:create(startX, startY, endX, endY)
    local distance = math.sqrt((endX - startX) ^ 2 + (endY - startY) ^ 2)
 
    local boardCount = 10
+   self.boardCount = boardCount
 
    local boardLength = distance / boardCount
-
+   
    local xStep = (endX - startX) / boardCount
    local yStep = (endY - startY) / boardCount
 
@@ -82,5 +83,20 @@ function Trampoline:cleanup()
 
    for i, joint in ipairs(self.joints) do
       joint:removeSelf()
+   end
+end
+
+function Trampoline:fadeOut(main)
+   self.fadedBoards = 0
+
+   local complete = function() 
+      self.fadedBoards = self.fadedBoards + 1
+      if self.fadedBoards == self.boardCount then
+	 main:removeTrampoline(self)
+      end
+   end
+
+   for i, board in ipairs(self.boards) do
+      transition.to(board, {time=1500, alpha=0 , onComplete=complete})
    end
 end
