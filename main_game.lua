@@ -79,7 +79,7 @@ function MainGame:mainGameLoop()
    end
 
    if self.lastY and self.state == 'falling' and (self.egg:getY() < self.lastY) then
-      self.egg.sprite:applyForce(0, -3200.0, self.egg:getX(), self.egg:getY())
+      self.egg.sprite:applyForce(0, -1600.0, self.egg:getX(), self.egg:getY())
       self.state = 'boosted'
    end
    
