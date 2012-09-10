@@ -117,14 +117,18 @@ function MainGame:touchBegan(event)
    if self.state == 'dead' then
       self:reloadLevel()
    elseif self.state == 'won' then
-      level = math.random(0, 1)
-      if level == 0 then
-	 self:newLevel(Level2)
-      else
-	 self:newLevel(Level3)
-      end
+      self:nextLevel()
    elseif self:isPlayingState() then
       self.startTrampoline = {x = event.x, y = event.y}
+   end
+end
+
+function MainGame:nextLevel()
+   level = math.random(0, 1)
+   if level == 0 then
+      self:newLevel(Level2)
+   else
+      self:newLevel(Level3)
    end
 end
 
