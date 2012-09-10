@@ -133,7 +133,7 @@ function MainGame:nextLevel()
 end
 
 function MainGame:touchEnded(event)
-   if self:isPlayingState() and self.startTrampoline then
+   if self:isPlayingState() and self.startTrampoline and self:isTrampolineBigEnough(event.x, event.y) then
       local trampoline = Trampoline(self.startTrampoline.x, self.startTrampoline.y, event.x, event.y)
       table.insert(self.trampolines, trampoline)
       local startFade = function() trampoline:fadeOut(self); end
@@ -183,4 +183,9 @@ function MainGame:removeTrampoline(trampolineToRemove)
    end
    trampolineToRemove:cleanup()
    table.remove(self.trampolines, trampolineToRemoveIndex)
+end
+
+function MainGame:isTrampolineBigEnough(x, y)
+   local distance = math.sqrt((x - self.startTrampoline.x) ^ 2 + (y - self.startTrampoline.y) ^ 2)
+   return distance > 50
 end

@@ -57,6 +57,12 @@ function test_can_place_trampolines()
    assert_equal(#main_game.trampolines, 1)
 end
 
+function test_cannot_make_tiny_trampoline()
+   main_game:touchBegan({x = 100, y = 100})
+   main_game:touchEnded({x = 135, y = 135})
+   assert_equal(#main_game.trampolines, 0)
+end
+
 function test_unload_level()
    main_game:displayText('remove me')
    local trampoline = Trampoline(0, 0, 10, 10)
