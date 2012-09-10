@@ -28,5 +28,8 @@ function GameSprite:setPos(x, y)
 end
 
 function GameSprite:cleanup()
-   self.sprite:removeSelf()
+   if self.sprite then
+      self.sprite:removeSelf()
+      self.sprite = nil
+   end
 end

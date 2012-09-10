@@ -50,12 +50,15 @@ function MainGame:newLevel(Level)
 end
 
 function MainGame:unloadLevel()
+   
+   self:removeLabel()
    self.level:cleanup()
    for i, trampoline in ipairs(self.trampolines) do
       trampoline:cleanup()
    end
    self.trampolines = {}
    self.lastY = nil
+   self.startTrampoline = nil
 end
 
 function MainGame:displayText(text)
@@ -113,9 +116,7 @@ end
 function MainGame:touchBegan(event)
    if self.state == 'dead' then
       self:reloadLevel()
-      self:removeLabel()
    elseif self.state == 'won' then
-      self:removeLabel()
       level = math.random(0, 1)
       if level == 0 then
 	 self:newLevel(Level2)
@@ -134,6 +135,23 @@ function MainGame:touchEnded(event)
       local startFade = function() trampoline:fadeOut(self); end
       timer.performWithDelay(2000, startFade)
    end
+end
+
+function MainGame:fadeTrampoline(trampoline)
+   local finish = function() self:removeTrampoline(trampoline); end
+   transition.to( trampoline, { time=1500, alpha=0, onComplete=finish } )
+end
+
+function MainGame:removeTrampoline(removeTrampoline)
+   trampolineIndexToRemove = 0
+   for i,trampoline in ipairs(self.trampolines) do
+      if trampoline == removeTrampoline then
+	 trampolineIndexToRemove = i
+      end
+   end
+
+   removeTrampoline:removeSelf()
+   table.remove(self.trampolines, trampolineIndexToRemove)
 end
 
 function MainGame:isPlayingState()
